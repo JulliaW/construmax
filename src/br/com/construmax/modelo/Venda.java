@@ -10,7 +10,6 @@ public class Venda {
     private int numeroNota;
     
     private Cliente cliente;
-    private Produto produto;
     
     private ArrayList<ItemVenda> itens;
     private double valorTotal;
@@ -49,14 +48,6 @@ public class Venda {
         this.cliente = cliente;
     }
 
-    public Produto getProduto() {
-        return produto;
-    }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
-
     public ArrayList<ItemVenda> getItens() {
         return itens;
     }
@@ -87,7 +78,7 @@ public class Venda {
         System.out.print("Cliente: ");
         System.out.println(this.getCliente().getNome());
         System.out.print("CPF: ");
-        System.out.println(this.getCliente().getCpf());
+        System.out.println(this.getCliente().getDocumento());
         System.out.println("===========PEDIDO===========");
         
         for (ItemVenda item : this.itens){

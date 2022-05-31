@@ -2,55 +2,23 @@ package br.com.construmax.modelo;
 
 import java.util.Calendar;
 
-public class Cliente {
+public class Cliente extends Pessoa{
     
-    private String nome;
-    private Calendar dataNascimento;
-    private String cpf;
-    private String telefone;
-    private String email;
-    private Endereco endereco;
+    private String cartaoFidelidade;
     
-    public void setNome(String value){
-        this.nome = value;
+    public Cliente(String id, String nome, Calendar dataNascimento, String documento, 
+            String telefone, String email, Endereco endereco, String cartaoFidelidade)
+    {
+        super(id, nome, dataNascimento, documento, telefone, email, endereco);
+        this.cartaoFidelidade = cartaoFidelidade;   
     }
-    public String getNome(){
-        return this.nome;
+
+    public String getCartaoFidelidade() {
+        return cartaoFidelidade;
     }
-    
-    public void setDataNascimento(Calendar value){
-        this.dataNascimento = value;
+
+    public void setCartaoFidelidade(String cartaoFidelidade) {
+        this.cartaoFidelidade = cartaoFidelidade;
     }
-    public Calendar getDataNascimento(){
-        return this.dataNascimento;
-    }
-    
-    public void setCpf(String value){
-        this.cpf = value;
-    }
-    public String getCpf(){
-        return this.cpf;
-    }
-    
-    public void setTelefone(String value){
-        this.telefone = value;
-    }
-    public String getTelefone(){
-        return this.telefone;
-    }
-    
-    public void setEmail(String value){
-        this.email = value;
-    }
-    public String getEmail(){
-        return this.email;
-    }
-    
-    public void setEndereco(Endereco value){
-        this.endereco = value;
-    }
-    public Endereco getEndereco(){
-        return this.endereco;
-    }
-    
+
 }
