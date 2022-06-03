@@ -25,8 +25,8 @@ public class Endereco {
         return logradouro;
     }
 
-    public void setLogradouro(String logradoro) {
-        this.logradouro = logradoro;
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
     }
 
     public String getCidade() {
@@ -35,6 +35,22 @@ public class Endereco {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
     }
 
     public String getBairro() {
@@ -60,5 +76,7 @@ public class Endereco {
     public void setCep(String cep) {
         this.cep = cep;
     }
+
+    
     
 }
