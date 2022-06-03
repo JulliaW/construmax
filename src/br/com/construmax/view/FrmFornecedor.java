@@ -70,7 +70,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         jMenuItem1.setText("jMenuItem1");
 
         setClosable(true);
-        setTitle("Cadastro de Cliente");
+        setTitle("Cadastro de Fornecedores");
 
         jPanel1.setBackground(new java.awt.Color(248, 196, 96));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
