@@ -1,15 +1,11 @@
 package br.com.construmax.view;
 
-import br.com.construmax.modelo.Endereco;
+import br.com.construmax.modelo.Fornecedor;
 import br.com.construmax.modelo.Produto;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class FrmProduto extends javax.swing.JInternalFrame {
@@ -117,11 +113,11 @@ public class FrmProduto extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "NOME", "TELEFONE", "NASCIMENTO", "EMAIL", "CARTÃO FIDELIDADE", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "COMPLEMENTO", "NÚMERO", "UF"
+                "ID", "DESCRICAO", "PRECO", "CÓDIGO BARRAS", "QUANTIDADE", "MARCA"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -178,7 +174,7 @@ public class FrmProduto extends javax.swing.JInternalFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtMarca, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE))))
                             .addComponent(txtDescricao))
                         .addGap(38, 38, 38)
@@ -220,88 +216,66 @@ public class FrmProduto extends javax.swing.JInternalFrame {
 
     private void modoNovo() {
         txtDescricao.setText("");
-        txtDocumento.setText("");
         txtCodBarras.setText("");
         txtPreco.setText("");
         txtMarca.setText("");
-        txtDataNascimento.setText("");
-        txtCep.setText("");
-        txtRua.setText("");
-        txtCidade.setText("");
-        txtBairro.setText("");
-        txtNumero.setText("");
-        txtUf.setText("");
+//        txtFornecedor.setText("");
+        txtQuantidade.setText("");
 
         txtDescricao.setEnabled(false);
-        txtDescricao.setEnabled(false);
-        txtDocumento.setEnabled(false);
         txtCodBarras.setEnabled(false);
         txtPreco.setEnabled(false);
         txtMarca.setEnabled(false);
-        txtDataNascimento.setEnabled(false);
-        txtCep.setEnabled(false);
-        txtRua.setEnabled(false);
-        txtCidade.setEnabled(false);
-        txtBairro.setEnabled(false);
-        txtNumero.setEnabled(false);
-        txtUf.setEnabled(false);
-
+        txtQuantidade.setEnabled(false);
+//        txtFornecedor.setEnabled(false);
+        
         btnSalvar.setEnabled(false);
         btnExcluir.setEnabled(false);
+        btnNovo.setEnabled(true);
 
     }
 
     private void habilitarCampos()
     {
         txtDescricao.setEnabled(true);
-        txtDescricao.setEnabled(true);
-        txtDocumento.setEnabled(true);
+        txtQuantidade.setEnabled(true);
         txtCodBarras.setEnabled(true);
         txtPreco.setEnabled(true);
         txtMarca.setEnabled(true);
-        txtDataNascimento.setEnabled(true);
-        txtCep.setEnabled(true);
-        txtRua.setEnabled(true);
-        txtCidade.setEnabled(true);
-        txtBairro.setEnabled(true);
-        txtNumero.setEnabled(true);
-        txtUf.setEnabled(true);
+//        txtFornecedor.setEnabled(true);
     }
     
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
 
-        Calendar cal = Calendar.getInstance();
+        
+        //Fornecedor fornecedor = new Fornecedor(id.toString(), txtFornecedor.getText());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String idProduto = "";
 
-        try {
+        if (this.modoAlterarDeletar == true) {
+            idProduto = this.id;
 
-            cal.setTime(sdf.parse(txtDataNascimento.getText()));
-
-        } catch (ParseException ex) {
-            Logger.getLogger(FrmProduto.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            idProduto = java.util.UUID.randomUUID().toString();
         }
 
-        Endereco endereco = new Endereco(txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
-                txtBairro.getText(), txtCep.getText());
-
-        UUID id = java.util.UUID.randomUUID();
-
-        Cliente cliente = new Cliente(id.toString(), txtDescricao.getText(), cal, txtDocumento.getText(), txtMarca.getText(),
-                txtCodBarras.getText(), endereco, txtPreco.getText());
+        Produto produto = new Produto(id.toString(), txtDescricao.getText(), txtMarca.getText(),
+                txtCodBarras.getText(), txtPreco.getText(), txtQuantidade.getText());
+        
 
         this.modoNovo();
         
         if(this.modoAlterarDeletar == true)
         {
-            lstCliente.set(this.indiceLista, cliente);
+            lstProduto.set(this.indiceLista, produto);
             btnNovo.setEnabled(true);
         }
         else
         {
-            lstCliente.add(cliente);
+            lstProduto.add(produto);
         }
         
+        this.modoAlterarDeletar = false;
         this.carregarTabela();
 
     }//GEN-LAST:event_btnSalvarActionPerformed
@@ -309,48 +283,42 @@ public class FrmProduto extends javax.swing.JInternalFrame {
     private void tableProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProdutoMouseClicked
 
         this.modoAlterarDeletar = true;
-
-        btnSalvar.setEnabled(true);
         
-        btnNovo.setEnabled(false);
-        
-        //PEGA A LINHA SELECIONADA
         int row = this.tableProduto.getSelectedRow();
 
-        //RECUPERA O VALOr DA COLUNA ID ESTA NA 0
-        String idCliente = (String) this.tableProduto.getValueAt(row, 0);
+        String idProduto = (String) this.tableProduto.getValueAt(row, 0);
         
-        this.id = idCliente;
+        this.id = idProduto;
 
         int indice = 0;
 
-        //RECUPERAR POR ID
-        Cliente cliente = null;
-        for (int i = 0; i < lstCliente.size(); i++) {
+        Produto produto = null;
+        for (int i = 0; i < lstProduto.size(); i++) {
 
-            if(lstCliente.get(i).getId().equals(idCliente)){
-                cliente = lstCliente.get(i);
+            if(lstProduto.get(i).getId().equals(idProduto)){
+                produto = lstProduto.get(i);
                 indice = i;
                 break;
             }
         }
+        
+        this.indiceLista = indice;
  
-        txtDescricao.setText(cliente.getNome());
-        txtCodBarras.setText(cliente.getEmail());
-        txtPreco.setText(cliente.getCartaoFidelidade());
-        txtMarca.setText(cliente.getTelefone());
+        txtDescricao.setText(produto.getDescricao());
+        txtCodBarras.setText(produto.getCodigoDeBarras());
+        txtPreco.setText(produto.getPreco());
+        txtMarca.setText(produto.getMarca());
+        txtQuantidade.setText(produto.getQuantidade());
+        
+//        txtFornecedor.setText(produto.getFornecedor().getNome());
+        
+        this.habilitarCampos();
 
-        DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
-        txtDataNascimento.setText(formataData.format(cliente.getDataNascimento().getTime()));
+        btnSalvar.setEnabled(true);
 
-        txtRua.setText(cliente.getEndereco().getLogradouro());
-        txtNumero.setText(cliente.getEndereco().getNumero());
-        txtBairro.setText(cliente.getEndereco().getBairro());
-        txtCep.setText(cliente.getEndereco().getCep());
+        btnNovo.setEnabled(false);
 
-        txtUf.setText(cliente.getEndereco().getUf());
-        txtCidade.setText(cliente.getEndereco().getCidade());
-
+        btnExcluir.setEnabled(true);
     }//GEN-LAST:event_tableProdutoMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -364,7 +332,17 @@ public class FrmProduto extends javax.swing.JInternalFrame {
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         // TODO add your handling code here:
         
-        
+         int input = JOptionPane.showConfirmDialog(null,
+                "Deseja realmente excluir?", "Atenção!!!", JOptionPane.YES_NO_OPTION);
+
+        if (input == 0) {
+
+            lstProduto.remove(this.indiceLista);
+
+            this.carregarTabela();
+
+        }
+        this.modoNovo();
         
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -374,24 +352,20 @@ public class FrmProduto extends javax.swing.JInternalFrame {
 
         model.setRowCount(0);
 
-        for (Cliente cliente : lstCliente) {
+        for (Produto produto : lstProduto) {
 
             DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
 
             //adicionar a linha
             model.addRow(new Object[]{
-                cliente.getId(),
-                cliente.getNome(),
-                cliente.getTelefone(),
-                formataData.format(cliente.getDataNascimento().getTime()),
-                cliente.getEmail(),
-                cliente.getRepresentacao(),
-                cliente.getEndereco().getLogradouro(),
-                cliente.getEndereco().getBairro(),
-                cliente.getEndereco().getCep(),
-                cliente.getEndereco().getCidade(),
-                cliente.getEndereco().getNumero(),
-                cliente.getEndereco().getUf()
+                produto.getId(),
+                produto.getDescricao(),
+                produto.getCodigoDeBarras(),
+                produto.getPreco(),
+                produto.getMarca(),
+                produto.getQuantidade()
+//                produto.getFornecedor().getNome()
+                
             });
         }
 

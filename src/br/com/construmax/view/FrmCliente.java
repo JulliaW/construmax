@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package br.com.construmax.view;
 
 import br.com.construmax.modelo.Cliente;
@@ -11,16 +7,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author NB004
- */
+
 public class FrmCliente extends javax.swing.JInternalFrame {
 
     ArrayList<Cliente> lstCliente;
@@ -37,6 +30,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
         this.modoNovo();
     }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -325,7 +319,6 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void modoNovo() {
-        //LIMPAR OS CAMPOS
         txtNome.setText("");
         txtDocumento.setText("");
         txtEmail.setText("");
@@ -339,7 +332,6 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         txtNumero.setText("");
         txtUf.setText("");
 
-        //DESABILITAR OS CAMPOS
         txtNome.setEnabled(false);
         txtNome.setEnabled(false);
         txtDocumento.setEnabled(false);
@@ -354,15 +346,14 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         txtNumero.setEnabled(false);
         txtUf.setEnabled(false);
 
-        //DESABILITAR OS BOTÕES
         btnSalvar.setEnabled(false);
         btnExcluir.setEnabled(false);
+        btnNovo.setEnabled(true);
 
     }
 
     private void habilitarCampos()
     {
-        txtNome.setEnabled(true);
         txtNome.setEnabled(true);
         txtDocumento.setEnabled(true);
         txtEmail.setEnabled(true);
@@ -391,14 +382,20 @@ public class FrmCliente extends javax.swing.JInternalFrame {
             Logger.getLogger(FrmCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        /*
-        public Endereco(String logradouro, String cidade, String numero, String uf, 
-           String bairro, String cep)
-         */
         Endereco endereco = new Endereco(txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
                 txtBairro.getText(), txtCep.getText());
+        
+        
 
-        UUID id = java.util.UUID.randomUUID();
+        String idCli = "";
+
+        if (this.modoAlterarDeletar == true) {
+            idCli = this.id;
+
+        } else {
+            idCli = java.util.UUID.randomUUID().toString();
+        }
+
 
         Cliente cliente = new Cliente(id.toString(), txtNome.getText(), cal, txtDocumento.getText(), txtTelefone.getText(),
                 txtEmail.getText(), endereco, txtFidelidade.getText());
@@ -415,6 +412,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
             lstCliente.add(cliente);
         }
         
+        this.modoAlterarDeletar = false;
         this.carregarTabela();
 
     }//GEN-LAST:event_btnSalvarActionPerformed
@@ -422,22 +420,15 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     private void tableClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableClienteMouseClicked
 
         this.modoAlterarDeletar = true;
-
-        btnSalvar.setEnabled(true);
         
-        btnNovo.setEnabled(false);
-        
-        //PEGA A LINHA SELECIONADA
         int row = this.tableCliente.getSelectedRow();
 
-        //RECUPERA O VALOr DA COLUNA ID ESTA NA 0
         String idCliente = (String) this.tableCliente.getValueAt(row, 0);
         
         this.id = idCliente;
 
         int indice = 0;
 
-        //RECUPERAR POR ID
         Cliente cliente = null;
         for (int i = 0; i < lstCliente.size(); i++) {
 
@@ -447,13 +438,14 @@ public class FrmCliente extends javax.swing.JInternalFrame {
                 break;
             }
         }
+        
+        this.indiceLista = indice;
  
         txtNome.setText(cliente.getNome());
         txtEmail.setText(cliente.getEmail());
         txtFidelidade.setText(cliente.getCartaoFidelidade());
         txtTelefone.setText(cliente.getTelefone());
 
-        //ALTERAR A DATA
         DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
         txtDataNascimento.setText(formataData.format(cliente.getDataNascimento().getTime()));
 
@@ -465,10 +457,14 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         txtUf.setText(cliente.getEndereco().getUf());
         txtCidade.setText(cliente.getEndereco().getCidade());
 
-        //lstCliente.remove(0);
-        //remover linha
-        //array = ArrayUtils.remove(array, index);
-        //btnSalvar.setText("Alterar");
+        this.habilitarCampos();
+
+        btnSalvar.setEnabled(true);
+
+        btnNovo.setEnabled(false);
+
+        btnExcluir.setEnabled(true);
+
 
     }//GEN-LAST:event_tableClienteMouseClicked
 
@@ -476,7 +472,6 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
         this.habilitarCampos();
 
-        //DESABILITAR OS BOTÕES
         btnSalvar.setEnabled(true);
        
     }//GEN-LAST:event_btnNovoActionPerformed
@@ -484,7 +479,17 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         // TODO add your handling code here:
         
-        
+        int input = JOptionPane.showConfirmDialog(null,
+                "Deseja realmente excluir?", "Atenção!!!", JOptionPane.YES_NO_OPTION);
+
+        if (input == 0) {
+
+            lstCliente.remove(this.indiceLista);
+
+            this.carregarTabela();
+
+        }
+        this.modoNovo();
         
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -494,31 +499,27 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
     private void carregarTabela() {
 
-        //CLASSE USADA PARA MANIPULAR A TABELA
         DefaultTableModel model = (DefaultTableModel) tableCliente.getModel();
 
-        //limpar a tabela antes de selecionar
         model.setRowCount(0);
 
-        //para cada cliente da lista
-        for (Cliente cliente : lstCliente) {
+        for (Cliente cli : lstCliente) {
 
             DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
 
-            //adicionar a linha
             model.addRow(new Object[]{
-                cliente.getId(),
-                cliente.getNome(),
-                cliente.getTelefone(),
-                formataData.format(cliente.getDataNascimento().getTime()),
-                cliente.getEmail(),
-                cliente.getCartaoFidelidade(),
-                cliente.getEndereco().getLogradouro(),
-                cliente.getEndereco().getBairro(),
-                cliente.getEndereco().getCep(),
-                cliente.getEndereco().getCidade(),
-                cliente.getEndereco().getNumero(),
-                cliente.getEndereco().getUf()
+                cli.getId(),
+                cli.getNome(),
+                cli.getTelefone(),
+                formataData.format(cli.getDataNascimento().getTime()),
+                cli.getEmail(),
+                cli.getCartaoFidelidade(),
+                cli.getEndereco().getLogradouro(),
+                cli.getEndereco().getBairro(),
+                cli.getEndereco().getCep(),
+                cli.getEndereco().getCidade(),
+                cli.getEndereco().getNumero(),
+                cli.getEndereco().getUf()
             });
         }
 

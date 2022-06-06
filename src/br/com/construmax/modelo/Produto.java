@@ -4,13 +4,44 @@ import java.util.Calendar;
 
 public class Produto {
     
+    private String id;
     private String descricao;
-    private double preco;
+    private String preco;
     private String codigoDeBarras;
-    private double quantidade;
+    private String quantidade;
     private String marca;
 
-    private Fornecedor fornecedor;
+    //private Fornecedor fornecedor;
+
+    public Produto(String id, String descricao, String preco, String codigoDeBarras, String quantidade, 
+            String marca) {
+        this.id = id;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.codigoDeBarras = codigoDeBarras;
+        this.quantidade = quantidade;
+        this.marca = marca;
+    }
+    
+    /*public Produto(String id, String descricao, String preco, String codigoDeBarras, String quantidade, 
+            String marca, Fornecedor fornecedor) {
+        this.id = id;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.codigoDeBarras = codigoDeBarras;
+        this.quantidade = quantidade;
+        this.marca = marca;
+        this.fornecedor = fornecedor;
+    }*/
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDescricao() {
         return descricao;
@@ -20,11 +51,11 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public double getPreco() {
+    public String getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(String preco) {
         this.preco = preco;
     }
 
@@ -36,11 +67,11 @@ public class Produto {
         this.codigoDeBarras = codigoDeBarras;
     }
 
-    public double getQuantidade() {
+    public String getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(double quantidade) {
+    public void setQuantidade(String quantidade) {
         this.quantidade = quantidade;
     }
 
@@ -52,12 +83,12 @@ public class Produto {
         this.marca = marca;
     }
 
-    public Fornecedor getFornecedor() {
-        return fornecedor;
-    }
-
-    public void setFornecedor(Fornecedor fornecedor) {
-        this.fornecedor = fornecedor;
-    }
+//    public Fornecedor getFornecedor() {
+//        return fornecedor;
+//    }
+//
+//    public void setFornecedor(Fornecedor fornecedor) {
+//        this.fornecedor = fornecedor;
+//    }
     
 }

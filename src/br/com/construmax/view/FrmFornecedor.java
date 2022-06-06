@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class FrmFornecedor extends javax.swing.JInternalFrame {
@@ -131,7 +132,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "NOME", "TELEFONE", "NASCIMENTO", "EMAIL", "CARTÃO FIDELIDADE", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "COMPLEMENTO", "NÚMERO", "UF"
+                "ID", "NOME", "TELEFONE", "NASCIMENTO", "EMAIL", "REPRESENTACAO", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "COMPLEMENTO", "NÚMERO", "UF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -345,6 +346,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         btnSalvar.setEnabled(false);
         btnExcluir.setEnabled(false);
+        btnNovo.setEnabled(true);
 
     }
 
@@ -382,22 +384,31 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         Endereco endereco = new Endereco(txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
                 txtBairro.getText(), txtCep.getText());
 
-        UUID id = java.util.UUID.randomUUID();
+        String idForn = "";
 
-        Cliente cliente = new Cliente(id.toString(), txtNome.getText(), cal, txtDocumento.getText(), txtTelefone.getText(),
-                txtEmail.getText(), endereco, txtRepresentacao.getText());
+        if (this.modoAlterarDeletar == true) {
+            idForn = this.id;
+
+        } else {
+            idForn = java.util.UUID.randomUUID().toString();
+        }
+
+        Fornecedor fornecedor = new Fornecedor(id.toString(), txtNome.getText(), cal, txtDocumento.getText(),
+                txtTelefone.getText(), txtEmail.getText(), endereco, txtRepresentacao.getText());
 
         this.modoNovo();
         
         if(this.modoAlterarDeletar == true)
         {
-            lstCliente.set(this.indiceLista, cliente);
+            lstFornecedor.set(this.indiceLista, fornecedor);
             btnNovo.setEnabled(true);
         }
         else
         {
-            lstCliente.add(cliente);
+            lstFornecedor.add(fornecedor);
         }
+        
+        this.modoAlterarDeletar = false;
         
         this.carregarTabela();
 
@@ -407,46 +418,49 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         this.modoAlterarDeletar = true;
 
-        btnSalvar.setEnabled(true);
-        
-        btnNovo.setEnabled(false);
-        
-        //PEGA A LINHA SELECIONADA
         int row = this.tableFornecedor.getSelectedRow();
 
-        //RECUPERA O VALOr DA COLUNA ID ESTA NA 0
-        String idCliente = (String) this.tableFornecedor.getValueAt(row, 0);
+        String idFornecedor = (String) this.tableFornecedor.getValueAt(row, 0);
         
-        this.id = idCliente;
+        this.id = idFornecedor;
 
         int indice = 0;
 
-        //RECUPERAR POR ID
-        Cliente cliente = null;
-        for (int i = 0; i < lstCliente.size(); i++) {
+        Fornecedor fornecedor = null;
+        for (int i = 0; i < lstFornecedor.size(); i++) {
 
-            if(lstCliente.get(i).getId().equals(idCliente)){
-                cliente = lstCliente.get(i);
+            if(lstFornecedor.get(i).getId().equals(idFornecedor)){
+                fornecedor = lstFornecedor.get(i);
                 indice = i;
                 break;
             }
         }
+        
+        this.indiceLista = indice;
  
-        txtNome.setText(cliente.getNome());
-        txtEmail.setText(cliente.getEmail());
-        txtRepresentacao.setText(cliente.getCartaoFidelidade());
-        txtTelefone.setText(cliente.getTelefone());
+        txtNome.setText(fornecedor.getNome());
+        txtEmail.setText(fornecedor.getEmail());
+        txtRepresentacao.setText(fornecedor.getRepresentacao());
+        txtTelefone.setText(fornecedor.getTelefone());
 
         DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
-        txtDataNascimento.setText(formataData.format(cliente.getDataNascimento().getTime()));
+        txtDataNascimento.setText(formataData.format(fornecedor.getDataNascimento().getTime()));
 
-        txtRua.setText(cliente.getEndereco().getLogradouro());
-        txtNumero.setText(cliente.getEndereco().getNumero());
-        txtBairro.setText(cliente.getEndereco().getBairro());
-        txtCep.setText(cliente.getEndereco().getCep());
+        txtRua.setText(fornecedor.getEndereco().getLogradouro());
+        txtNumero.setText(fornecedor.getEndereco().getNumero());
+        txtBairro.setText(fornecedor.getEndereco().getBairro());
+        txtCep.setText(fornecedor.getEndereco().getCep());
 
-        txtUf.setText(cliente.getEndereco().getUf());
-        txtCidade.setText(cliente.getEndereco().getCidade());
+        txtUf.setText(fornecedor.getEndereco().getUf());
+        txtCidade.setText(fornecedor.getEndereco().getCidade());
+        
+        this.habilitarCampos();
+
+        btnSalvar.setEnabled(true);
+
+        btnNovo.setEnabled(false);
+
+        btnExcluir.setEnabled(true);
 
     }//GEN-LAST:event_tableFornecedorMouseClicked
 
@@ -461,7 +475,17 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         // TODO add your handling code here:
         
-        
+        int input = JOptionPane.showConfirmDialog(null,
+                "Deseja realmente excluir?", "Atenção!!!", JOptionPane.YES_NO_OPTION);
+
+        if (input == 0) {
+
+            lstFornecedor.remove(this.indiceLista);
+
+            this.carregarTabela();
+
+        }
+        this.modoNovo();
         
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -475,24 +499,24 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         model.setRowCount(0);
 
-        for (Cliente cliente : lstCliente) {
+        for (Fornecedor fornecedor : lstFornecedor) {
 
             DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
 
             //adicionar a linha
             model.addRow(new Object[]{
-                cliente.getId(),
-                cliente.getNome(),
-                cliente.getTelefone(),
-                formataData.format(cliente.getDataNascimento().getTime()),
-                cliente.getEmail(),
-                cliente.getRepresentacao(),
-                cliente.getEndereco().getLogradouro(),
-                cliente.getEndereco().getBairro(),
-                cliente.getEndereco().getCep(),
-                cliente.getEndereco().getCidade(),
-                cliente.getEndereco().getNumero(),
-                cliente.getEndereco().getUf()
+                fornecedor.getId(),
+                fornecedor.getNome(),
+                fornecedor.getTelefone(),
+                formataData.format(fornecedor.getDataNascimento().getTime()),
+                fornecedor.getEmail(),
+                fornecedor.getRepresentacao(),
+                fornecedor.getEndereco().getLogradouro(),
+                fornecedor.getEndereco().getBairro(),
+                fornecedor.getEndereco().getCep(),
+                fornecedor.getEndereco().getCidade(),
+                fornecedor.getEndereco().getNumero(),
+                fornecedor.getEndereco().getUf()
             });
         }
 

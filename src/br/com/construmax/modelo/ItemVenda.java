@@ -22,9 +22,9 @@ public class ItemVenda {
         this.quantidade = quantidade;
     }
 
-    public double getValorTotal() {
+    /*public double getValorTotal() {
         return this.produto.getPreco() * quantidade;
-    }
+    }*/
 
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;

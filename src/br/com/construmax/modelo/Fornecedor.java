@@ -12,6 +12,11 @@ public class Fornecedor extends Pessoa {
         super(id, nome, dataNascimento, documento, telefone, email, endereco);
         this.representacao = representacao;
     }
+    
+    public Fornecedor(String id, String nome)
+    {
+        super(id, nome);
+    }
 
     public String getRepresentacao() {
         return representacao;

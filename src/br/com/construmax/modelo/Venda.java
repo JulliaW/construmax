@@ -93,7 +93,7 @@ public class Venda {
             System.out.print("Valor unitário: ");
             System.out.println(item.getProduto().getPreco());
             System.out.print("Valor total: ");
-            System.out.println(item.getValorTotal());            
+           // System.out.println(item.getValorTotal());            
             System.out.println("============================");  
         }
         
