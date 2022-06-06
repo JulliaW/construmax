@@ -67,7 +67,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         jLabel12 = new javax.swing.JLabel();
         txtDataNascimento = new javax.swing.JFormattedTextField();
         txtCep = new javax.swing.JFormattedTextField();
-        jButton2 = new javax.swing.JButton();
+        btnCreditos = new javax.swing.JButton();
 
         jMenuItem1.setBackground(new java.awt.Color(255, 51, 51));
         jMenuItem1.setText("jMenuItem1");
@@ -190,9 +190,14 @@ public class FrmCliente extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
 
-        jButton2.setBackground(new java.awt.Color(248, 196, 96));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/construmax/view/Imagens/Logo.png"))); // NOI18N
-        jButton2.setBorder(null);
+        btnCreditos.setBackground(new java.awt.Color(248, 196, 96));
+        btnCreditos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/construmax/view/Imagens/Logo.png"))); // NOI18N
+        btnCreditos.setBorder(null);
+        btnCreditos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreditosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -263,7 +268,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
                                                 .addGap(18, 18, 18)
                                                 .addComponent(txtUf, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                         .addGap(38, 38, 38)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(16, 16, 16)))
                 .addContainerGap())
         );
@@ -307,7 +312,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
                             .addComponent(jLabel12)
                             .addComponent(txtUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9)))
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnCreditos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -497,6 +502,14 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUfActionPerformed
 
+    private void btnCreditosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreditosActionPerformed
+        // TODO add your handling code here:
+        
+        JOptionPane.showConfirmDialog(null,
+                "Jullia e Fernando", "Créditos", JOptionPane.CLOSED_OPTION);
+
+    }//GEN-LAST:event_btnCreditosActionPerformed
+
     private void carregarTabela() {
 
         DefaultTableModel model = (DefaultTableModel) tableCliente.getModel();
@@ -528,10 +541,10 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCreditos;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
