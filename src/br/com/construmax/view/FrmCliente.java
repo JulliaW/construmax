@@ -2,11 +2,14 @@ package br.com.construmax.view;
 
 import br.com.construmax.modelo.Cliente;
 import br.com.construmax.modelo.Endereco;
+import br.com.construmax.rdn.ClienteRdn;
+import br.com.construmax.rdn.EnderecoRdn;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +22,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
     ArrayList<Cliente> lstCliente;
     
     boolean modoAlterarDeletar = false;
-    String id = "";
+    int id = 0;
     int indiceLista = 0;
 
     public FrmCliente() {
@@ -29,6 +32,8 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         initComponents();
 
         this.modoNovo();
+        
+        this.carregarTabela();
     }
     
 
@@ -387,39 +392,37 @@ public class FrmCliente extends javax.swing.JInternalFrame {
             Logger.getLogger(FrmCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Endereco endereco = new Endereco(txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
-                txtBairro.getText(), txtCep.getText());
-        
-        
-
-        String idCli = "";
+        int idCli = 0;
 
         if (this.modoAlterarDeletar == true) {
             idCli = this.id;
 
         } else {
-            idCli = java.util.UUID.randomUUID().toString();
+            idCli = 0;
         }
 
-
-        Cliente cliente = new Cliente(id.toString(), txtNome.getText(), cal, txtDocumento.getText(), txtTelefone.getText(),
+        Endereco endereco = new Endereco(0, txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
+                txtBairro.getText(), txtCep.getText(), idCli);
+        
+        Cliente cliente = new Cliente(idCli, txtNome.getText(), cal, txtDocumento.getText(), txtTelefone.getText(),
                 txtEmail.getText(), endereco, txtFidelidade.getText());
 
-        this.modoNovo();
+        ClienteRdn cliRdn = new ClienteRdn();
         
         if(this.modoAlterarDeletar == true)
         {
-            lstCliente.set(this.indiceLista, cliente);
+            cliRdn.alterarCliente(cliente);
             btnNovo.setEnabled(true);
         }
         else
         {
-            lstCliente.add(cliente);
+            cliRdn.inserirCliente(cliente);
         }
         
         this.modoAlterarDeletar = false;
         this.carregarTabela();
-
+        
+        this.modoNovo();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void tableClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableClienteMouseClicked
@@ -428,28 +431,30 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         
         int row = this.tableCliente.getSelectedRow();
 
-        String idCliente = (String) this.tableCliente.getValueAt(row, 0);
+        int idCliente = (int) this.tableCliente.getValueAt(row, 0);
         
         this.id = idCliente;
 
-        int indice = 0;
-
-        Cliente cliente = null;
-        for (int i = 0; i < lstCliente.size(); i++) {
+        //int indice = 0;
+        ClienteRdn rdn = new ClienteRdn();
+        
+        Cliente cliente = rdn.obterPorId(id);
+        
+        /*for (int i = 0; i < lstCliente.size(); i++) {
 
             if(lstCliente.get(i).getId().equals(idCliente)){
                 cliente = lstCliente.get(i);
                 indice = i;
                 break;
             }
-        }
-        
-        this.indiceLista = indice;
+        }        
+        this.indiceLista = indice;*/
  
         txtNome.setText(cliente.getNome());
         txtEmail.setText(cliente.getEmail());
         txtFidelidade.setText(cliente.getCartaoFidelidade());
         txtTelefone.setText(cliente.getTelefone());
+        txtDocumento.setText(cliente.getDocumento());
 
         DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
         txtDataNascimento.setText(formataData.format(cliente.getDataNascimento().getTime()));
@@ -469,7 +474,8 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         btnNovo.setEnabled(false);
 
         btnExcluir.setEnabled(true);
-
+        
+        btnSalvar.setText("Alterar");
 
     }//GEN-LAST:event_tableClienteMouseClicked
 
@@ -489,8 +495,14 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
         if (input == 0) {
 
-            lstCliente.remove(this.indiceLista);
+            EnderecoRdn endRdn = new EnderecoRdn();
 
+            endRdn.deletarEnderecoPorPessoa(this.id);
+            
+            ClienteRdn rdn = new ClienteRdn();
+            
+            rdn.deletarCliente(this.id);
+                    
             this.carregarTabela();
 
         }
@@ -515,6 +527,10 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         DefaultTableModel model = (DefaultTableModel) tableCliente.getModel();
 
         model.setRowCount(0);
+        
+        ClienteRdn cliRdn = new ClienteRdn();
+
+        List<Cliente> lstCli = cliRdn.obterTodos();
 
         for (Cliente cli : lstCliente) {
 

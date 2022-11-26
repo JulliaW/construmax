@@ -18,7 +18,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
     ArrayList<Fornecedor> lstFornecedor;
     
     boolean modoAlterarDeletar = false;
-    String id = "";
+    int id = 0;
     int indiceLista = 0;
 
     public FrmFornecedor() {
@@ -28,6 +28,8 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         initComponents();
 
         this.modoNovo();
+        
+        this.carregarTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -381,22 +383,22 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
             Logger.getLogger(FrmFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Endereco endereco = new Endereco(txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
-                txtBairro.getText(), txtCep.getText());
-
-        String idForn = "";
+        int idForn = 0;
 
         if (this.modoAlterarDeletar == true) {
             idForn = this.id;
 
         } else {
-            idForn = java.util.UUID.randomUUID().toString();
+            idForn = 0;
         }
 
-        Fornecedor fornecedor = new Fornecedor(id.toString(), txtNome.getText(), cal, txtDocumento.getText(),
+        Endereco endereco = new Endereco(0, txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
+                txtBairro.getText(), txtCep.getText(), idForn);
+        
+        Fornecedor fornecedor = new Fornecedor(idForn, txtNome.getText(), cal, txtDocumento.getText(),
                 txtTelefone.getText(), txtEmail.getText(), endereco, txtRepresentacao.getText());
-
-        this.modoNovo();
+        
+        FornecedorRdn
         
         if(this.modoAlterarDeletar == true)
         {
