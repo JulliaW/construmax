@@ -2,11 +2,14 @@ package br.com.construmax.view;
 
 import br.com.construmax.modelo.Endereco;
 import br.com.construmax.modelo.Funcionario;
+import br.com.construmax.rdn.EnderecoRdn;
+import br.com.construmax.rdn.FuncionarioRdn;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +21,7 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
     ArrayList<Funcionario> lstFuncionario;
     
     boolean modoAlterarDeletar = false;
-    String id = "";
+    int id = 0;
     int indiceLista = 0;
 
     public FrmFuncionario() {
@@ -28,6 +31,8 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
         initComponents();
 
         this.modoNovo();
+        
+        this.carregarTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -379,28 +384,28 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
 
         } catch (ParseException ex) {
             Logger.getLogger(FrmFuncionario.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }       
 
-        Endereco endereco = new Endereco(txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
-                txtBairro.getText(), txtCep.getText());
-
-        String idFunci = "";
+        int idFunci = 0;
 
         if (this.modoAlterarDeletar == true) {
             idFunci = this.id;
 
         } else {
-            idFunci = java.util.UUID.randomUUID().toString();
+            idFunci = 0;
         }
+        
+        Endereco endereco = new Endereco(0, txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
+                txtBairro.getText(), txtCep.getText(), idFunci);
 
-        Funcionario funcionario = new Funcionario(id.toString(), txtNome.getText(), cal, txtDocumento.getText(), 
+        Funcionario funcionario = new Funcionario(idFunci, txtNome.getText(), cal, txtDocumento.getText(), 
                 txtTelefone.getText(), txtEmail.getText(), endereco, txtCartaoPonto.getText());
 
-        this.modoNovo();
+        FuncionarioRdn cliRdn = new FuncionarioRdn();
         
         if(this.modoAlterarDeletar == true)
         {
-            lstFuncionario.set(this.indiceLista, funcionario);
+            cliRdn.alterarFuncionario(funcionario);
             btnNovo.setEnabled(true);
         }
         else
@@ -408,9 +413,10 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
             lstFuncionario.add(funcionario);
         }
         
-        this.modoAlterarDeletar = false;
-        
+        this.modoAlterarDeletar = false;        
         this.carregarTabela();
+        
+        this.modoNovo();
 
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -420,14 +426,16 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
         
         int row = this.tableFuncionario.getSelectedRow();
 
-        String idFuncionario = (String) this.tableFuncionario.getValueAt(row, 0);
+        int idFuncionario = (int) this.tableFuncionario.getValueAt(row, 0);
         
         this.id = idFuncionario;
 
-        int indice = 0;
-
-        Funcionario funcionario = null;
-        for (int i = 0; i < lstFuncionario.size(); i++) {
+        //int indice = 0;
+        FuncionarioRdn rdn = new FuncionarioRdn();
+        
+        Funcionario funcionario = rdn.obterPorId(id);
+        
+        /*for (int i = 0; i < lstFuncionario.size(); i++) {
 
             if(lstFuncionario.get(i).getId().equals(idFuncionario)){
                 funcionario = lstFuncionario.get(i);
@@ -436,12 +444,13 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
             }
         }
         
-         this.indiceLista = indice;
+         this.indiceLista = indice;*/
  
         txtNome.setText(funcionario.getNome());
         txtEmail.setText(funcionario.getEmail());
         txtCartaoPonto.setText(funcionario.getNumeroCartaoPonto());
         txtTelefone.setText(funcionario.getTelefone());
+        txtDocumento.setText(funcionario.getDocumento());
 
         DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
         txtDataNascimento.setText(formataData.format(funcionario.getDataNascimento().getTime()));
@@ -461,7 +470,8 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
         btnNovo.setEnabled(false);
 
         btnExcluir.setEnabled(true);
-
+        
+        btnSalvar.setText("Alterar");
     }//GEN-LAST:event_tableFuncionarioMouseClicked
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -480,7 +490,13 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
 
         if (input == 0) {
 
-            lstFuncionario.remove(this.indiceLista);
+            EnderecoRdn endRdn = new EnderecoRdn();
+            
+            endRdn.deletarEnderecoPorPessoa(this.id);
+            
+            FuncionarioRdn rdn = new FuncionarioRdn();
+            
+            rdn.deletarFuncionario(this.id);
 
             this.carregarTabela();
 
@@ -498,15 +514,20 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
         DefaultTableModel model = (DefaultTableModel) tableFuncionario.getModel();
 
         model.setRowCount(0);
-
+        
+        FuncionarioRdn rdn = new FuncionarioRdn();
+        
+        List<Funcionario> lstFunc = rdn.obterTodos();
+               
         for (Funcionario funcionario : lstFuncionario) {
 
             DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
-
+            
             //adicionar a linha
             model.addRow(new Object[]{
                 funcionario.getId(),
                 funcionario.getNome(),
+                funcionario.getDocumento(),
                 funcionario.getTelefone(),
                 formataData.format(funcionario.getDataNascimento().getTime()),
                 funcionario.getEmail(),

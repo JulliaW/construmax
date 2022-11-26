@@ -2,11 +2,14 @@ package br.com.construmax.view;
 
 import br.com.construmax.modelo.Endereco;
 import br.com.construmax.modelo.Fornecedor;
+import br.com.construmax.rdn.EnderecoRdn;
+import br.com.construmax.rdn.FornecedorRdn;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -398,21 +401,23 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         Fornecedor fornecedor = new Fornecedor(idForn, txtNome.getText(), cal, txtDocumento.getText(),
                 txtTelefone.getText(), txtEmail.getText(), endereco, txtRepresentacao.getText());
         
-        FornecedorRdn
+        FornecedorRdn rdn = new FornecedorRdn();
         
         if(this.modoAlterarDeletar == true)
         {
-            lstFornecedor.set(this.indiceLista, fornecedor);
+            rdn.alterarFornecedor(fornecedor);
             btnNovo.setEnabled(true);
         }
         else
         {
-            lstFornecedor.add(fornecedor);
+            rdn.inserirFornecedor(fornecedor);
         }
         
         this.modoAlterarDeletar = false;
         
         this.carregarTabela();
+        
+        this.modoNovo();
 
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -422,14 +427,16 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         int row = this.tableFornecedor.getSelectedRow();
 
-        String idFornecedor = (String) this.tableFornecedor.getValueAt(row, 0);
+        int idFornecedor = (int) this.tableFornecedor.getValueAt(row, 0);
         
         this.id = idFornecedor;
 
-        int indice = 0;
-
-        Fornecedor fornecedor = null;
-        for (int i = 0; i < lstFornecedor.size(); i++) {
+        //int indice = 0;
+        FornecedorRdn rdn = new FornecedorRdn();
+        
+        Fornecedor fornecedor = rdn.obterPorId(id);
+        
+        /*for (int i = 0; i < lstFornecedor.size(); i++) {
 
             if(lstFornecedor.get(i).getId().equals(idFornecedor)){
                 fornecedor = lstFornecedor.get(i);
@@ -438,12 +445,13 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
             }
         }
         
-        this.indiceLista = indice;
+        this.indiceLista = indice;*/
  
         txtNome.setText(fornecedor.getNome());
         txtEmail.setText(fornecedor.getEmail());
         txtRepresentacao.setText(fornecedor.getRepresentacao());
         txtTelefone.setText(fornecedor.getTelefone());
+        txtDocumento.setText(fornecedor.getDocumento());
 
         DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
         txtDataNascimento.setText(formataData.format(fornecedor.getDataNascimento().getTime()));
@@ -482,7 +490,13 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         if (input == 0) {
 
-            lstFornecedor.remove(this.indiceLista);
+           EnderecoRdn endRdn = new EnderecoRdn();
+           
+           endRdn.deletarEnderecoPorPessoa(this.id);
+           
+           FornecedorRdn rdn = new FornecedorRdn();
+           
+           rdn.deletarFornecedor(this.id);
 
             this.carregarTabela();
 
@@ -500,6 +514,10 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         DefaultTableModel model = (DefaultTableModel) tableFornecedor.getModel();
 
         model.setRowCount(0);
+        
+        FornecedorRdn rdn = new FornecedorRdn();
+        
+        List<Fornecedor> lstForn = rdn.obterTodos();
 
         for (Fornecedor fornecedor : lstFornecedor) {
 
@@ -509,6 +527,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
             model.addRow(new Object[]{
                 fornecedor.getId(),
                 fornecedor.getNome(),
+                fornecedor.getDocumento(),
                 fornecedor.getTelefone(),
                 formataData.format(fornecedor.getDataNascimento().getTime()),
                 fornecedor.getEmail(),

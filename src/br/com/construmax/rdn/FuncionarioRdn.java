@@ -1,6 +1,6 @@
 package br.com.construmax.rdn;
 
-import br.com.construmax.modelo.Fornecedor;
+import br.com.construmax.modelo.Funcionario;
 import br.com.construmax.modelo.Endereco;
 
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.sql.*;
 import java.util.Calendar;
 
-public class FornecedorRdn {
+public class FuncionarioRdn {
 
-    public int inserirFornecedor(Fornecedor forn) {
+    public int inserirFuncionario(Funcionario func) {
 
         try {
 
@@ -23,7 +23,7 @@ public class FornecedorRdn {
             str.append("            nome                    ");
             str.append("            ,dataNascimento         ");
             str.append("            ,documento              ");
-            str.append("            ,representacao          ");
+            str.append("            ,cartaoponto            ");
             str.append("            ,telefone               ");
             str.append("            ,email                  ");
             str.append("            ,tipo)                  ");
@@ -42,17 +42,17 @@ public class FornecedorRdn {
 
             PreparedStatement stmt = conn.prepareStatement(str.toString(), Statement.RETURN_GENERATED_KEYS);
 
-            stmt.setString(1, forn.getNome());
-            stmt.setDate(2, new java.sql.Date(forn.getDataNascimento().getTimeInMillis()));
-            stmt.setString(3, forn.getDocumento());
-            stmt.setString(4, forn.getRepresentacao());
-            stmt.setString(5, forn.getTelefone());
-            stmt.setString(6, forn.getEmail());
-            stmt.setInt(7, 2);
+            stmt.setString(1, func.getNome());
+            stmt.setDate(2, new java.sql.Date(func.getDataNascimento().getTimeInMillis()));
+            stmt.setString(3, func.getDocumento());
+            stmt.setString(4, func.getNumeroCartaoPonto());
+            stmt.setString(5, func.getTelefone());
+            stmt.setString(6, func.getEmail());
+            stmt.setInt(7, 3);
                   
             int id = 0;
             
-            linhasAfetadas =stmt.executeUpdate();      
+            linhasAfetadas = stmt.executeUpdate();      
             
             ResultSet rs = stmt.getGeneratedKeys();            
             if (rs.next()) {
@@ -60,13 +60,14 @@ public class FornecedorRdn {
                id = rs.getInt(1); //recuperar o id               
                
                EnderecoRdn endRdn = new EnderecoRdn();           
-               Endereco end = forn.getEndereco();
+               Endereco end = func.getEndereco();
                end.setIdPessoa(id);
                
                endRdn.inserirEndereco(end);
                
             }                                                
 
+            //LIBERAR OS RECURSOS
             stmt.close();
             conn.close();
 
@@ -78,18 +79,18 @@ public class FornecedorRdn {
         }
     }
 
-    public int alterarFornecedor(Fornecedor forn) {
+    public int alterarFuncionario(Funcionario func) {
 
         try {
             int linhasAfetadas = 0;
             StringBuilder str = new StringBuilder();
 
             str.append("UPDATE PESSOA SET NOME 			 = ?        ");
-            str.append("                 ,DATANASCIMENTO         = ?        ");
-            str.append("                 ,DOCUMENTO		 = ?        ");
+            str.append("                  ,DATANASCIMENTO        = ?        ");
+            str.append("                  ,DOCUMENTO		 = ?        ");
             str.append("                 ,TELEFONE               = ?        ");
             str.append("                 ,EMAIL 		 = ?        ");
-            str.append("                 ,REPRESENTACAO 	 = ?        ");
+            str.append("                 ,CARTAOPONTO   	 = ?        ");
             str.append("WHERE	ID                               = ?        ");
 
             ConnectionFactory factory = new ConnectionFactory();
@@ -97,19 +98,20 @@ public class FornecedorRdn {
 
             PreparedStatement stmt = conn.prepareStatement(str.toString());
 
-            stmt.setString(1, forn.getNome());
-            stmt.setDate(2, new java.sql.Date(forn.getDataNascimento().getTimeInMillis()));
-            stmt.setString(3, forn.getDocumento());
-            stmt.setString(4, forn.getTelefone());
-            stmt.setString(5, forn.getEmail());
-            stmt.setString(6, forn.getRepresentacao());            
-            stmt.setInt(7, forn.getId());
+            stmt.setString(1, func.getNome());
+            stmt.setDate(2, new java.sql.Date(func.getDataNascimento().getTimeInMillis()));
+            stmt.setString(3, func.getDocumento());
+            stmt.setString(4, func.getTelefone());
+            stmt.setString(5, func.getEmail());
+            stmt.setString(6, func.getNumeroCartaoPonto());            
+            stmt.setInt(7, func.getId());
 
             linhasAfetadas = stmt.executeUpdate();
             
             EnderecoRdn endRdn = new EnderecoRdn();            
-            endRdn.alterarEndereco(forn.getEndereco());
+            endRdn.alterarEndereco(func.getEndereco());
             
+            //LIBERAR OS RECURSOS
             stmt.close();
             conn.close();
 
@@ -122,7 +124,7 @@ public class FornecedorRdn {
 
     }
 
-    public int deletarFornecedor(int idFornecedor) {
+    public int deletarFuncionario(int idFuncionario) {
         try {
 
             int linhasAfetadas = 0;
@@ -132,7 +134,7 @@ public class FornecedorRdn {
             Connection conn = factory.getConnection();
 
             PreparedStatement stmt = conn.prepareStatement(str.toString());
-            stmt.setInt(1, idFornecedor);
+            stmt.setInt(1, idFuncionario);
 
             linhasAfetadas = stmt.executeUpdate();
 
@@ -148,10 +150,10 @@ public class FornecedorRdn {
 
     }
 
-    public List<Fornecedor> obterTodos() {
+    public List<Funcionario> obterTodos() {
         try {
 
-            List<Fornecedor> lstForn = new ArrayList<Fornecedor>();
+            List<Funcionario> lstFunc = new ArrayList<Funcionario>();
 
             StringBuilder str = new StringBuilder();
 
@@ -161,9 +163,9 @@ public class FornecedorRdn {
             str.append("     ,DOCUMENTO          ");
             str.append("     ,TELEFONE           ");
             str.append("     ,EMAIL              ");
-            str.append("     ,REPRESENTACAO      ");
+            str.append("     ,CARTAOPONTO        ");
             str.append("FROM PESSOA              ");
-            str.append(" WHERE TIPO = 2          ");
+            str.append(" WHERE TIPO = 3          ");
 
             //ABRE A CONEXÃO
             Connection conn = new ConnectionFactory().getConnection();
@@ -179,25 +181,25 @@ public class FornecedorRdn {
              
             while (rs.next()) {
 
+                //CONVERTER SQL DATE TO CALENDAR
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(rs.getDate("DATANASCIMENTO"));
-
-              Endereco end = endRdn.obterPorIdPessoa(rs.getInt("ID"));
+               
+              Endereco end = endRdn.obterPorIdPessoa(rs.getInt("ID"));                
                 
-                
-                Fornecedor cli = new Fornecedor(rs.getInt("ID"),
+                Funcionario func = new Funcionario(rs.getInt("ID"),
                         rs.getString("NOME"),
                         calendar,
                         rs.getString("DOCUMENTO"),
                         rs.getString("TELEFONE"),
                         rs.getString("EMAIL"),
                         end,
-                        rs.getString("REPRESENTACAO"));
+                        rs.getString("CARTAOPONTO"));
 
-                lstForn.add(cli);
+                lstFunc.add(func);
 
             }
-            return lstForn;
+            return lstFunc;
 
         } catch (SQLException ex) {
 
@@ -206,23 +208,23 @@ public class FornecedorRdn {
         }
     }
     
-    public Fornecedor obterPorId(int id) {
+    public Funcionario obterPorId(int id) {
         try {
 
-            Fornecedor ret = null;
+            Funcionario ret = null;
 
             StringBuilder str = new StringBuilder();
 
             str.append("SELECT  ID               ");
             str.append("     ,NOME               ");
             str.append("     ,DATANASCIMENTO     ");
-            str.append("     ,REPRESENTACAO      ");
+            str.append("     ,CARTAOPONTO        ");
             str.append("     ,DOCUMENTO          ");
             str.append("     ,TELEFONE           ");
             str.append("     ,EMAIL              ");
             str.append("FROM PESSOA              ");
-            str.append(" WHERE TIPO = 2          ");
-            str.append(" AND ID     = ?         ");
+            str.append(" WHERE TIPO = 3          ");
+            str.append(" AND ID      = ?         ");
 
             //ABRE A CONEXÃO
             Connection conn = new ConnectionFactory().getConnection();
@@ -230,6 +232,7 @@ public class FornecedorRdn {
             //CRIAR NOSSO STATEMENT            
             PreparedStatement stmt = conn.prepareStatement(str.toString());
 
+          
             stmt.setInt(1, id);
             
             //RECEBER OS DADOS NO RESULTSET
@@ -246,14 +249,14 @@ public class FornecedorRdn {
 
                 Endereco end = endRdn.obterPorIdPessoa(rs.getInt("ID"));
                 
-                ret = new Fornecedor(rs.getInt("ID"),
+                ret = new Funcionario(rs.getInt("ID"),
                         rs.getString("NOME"),
                         calendar,
                         rs.getString("DOCUMENTO"),
                         rs.getString("TELEFONE"),
                         rs.getString("EMAIL"),
                         end,
-                        rs.getString("REPRESENTACAO"));
+                        rs.getString("CARTAOPONTO"));
                 
 
             }

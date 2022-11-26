@@ -2,9 +2,11 @@ package br.com.construmax.view;
 
 import br.com.construmax.modelo.Fornecedor;
 import br.com.construmax.modelo.Produto;
+import br.com.construmax.rdn.ProdutoRdn;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -13,7 +15,7 @@ public class FrmProduto extends javax.swing.JInternalFrame {
     ArrayList<Produto> lstProduto;
     
     boolean modoAlterarDeletar = false;
-    String id = "";
+    int id = 0;
     int indiceLista = 0;
 
     public FrmProduto() {
@@ -23,6 +25,8 @@ public class FrmProduto extends javax.swing.JInternalFrame {
         initComponents();
 
         this.modoNovo();
+        
+        this.carregarTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -250,34 +254,35 @@ public class FrmProduto extends javax.swing.JInternalFrame {
         
         //Fornecedor fornecedor = new Fornecedor(id.toString(), txtFornecedor.getText());
 
-        String idProduto = "";
+        int idProduto = 0;
 
         if (this.modoAlterarDeletar == true) {
             idProduto = this.id;
 
         } else {
-            idProduto = java.util.UUID.randomUUID().toString();
+            idProduto = 0;
         }
 
-        Produto produto = new Produto(id.toString(), txtDescricao.getText(), txtMarca.getText(),
+        Produto produto = new Produto(idProduto, txtDescricao.getText(), txtMarca.getText(),
                 txtCodBarras.getText(), txtPreco.getText(), txtQuantidade.getText());
         
-
-        this.modoNovo();
+        ProdutoRdn prodRdn = new ProdutoRdn();
         
         if(this.modoAlterarDeletar == true)
         {
-            lstProduto.set(this.indiceLista, produto);
+            //lstProduto.set(this.indiceLista, produto);
+            prodRdn.alterarProduto(produto);
             btnNovo.setEnabled(true);
         }
         else
         {
-            lstProduto.add(produto);
+            prodRdn.inserirProduto(produto);
         }
         
         this.modoAlterarDeletar = false;
         this.carregarTabela();
 
+        this.modoNovo();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void tableProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProdutoMouseClicked
@@ -286,14 +291,16 @@ public class FrmProduto extends javax.swing.JInternalFrame {
         
         int row = this.tableProduto.getSelectedRow();
 
-        String idProduto = (String) this.tableProduto.getValueAt(row, 0);
+        int idProduto = (int) this.tableProduto.getValueAt(row, 0);
         
         this.id = idProduto;
 
-        int indice = 0;
-
-        Produto produto = null;
-        for (int i = 0; i < lstProduto.size(); i++) {
+        //int indice = 0;
+        ProdutoRdn rdn = new ProdutoRdn();
+        
+        Produto produto = rdn.obterPorId(id);
+        
+        /*for (int i = 0; i < lstProduto.size(); i++) {
 
             if(lstProduto.get(i).getId().equals(idProduto)){
                 produto = lstProduto.get(i);
@@ -302,7 +309,7 @@ public class FrmProduto extends javax.swing.JInternalFrame {
             }
         }
         
-        this.indiceLista = indice;
+        this.indiceLista = indice;*/
  
         txtDescricao.setText(produto.getDescricao());
         txtCodBarras.setText(produto.getCodigoDeBarras());
@@ -337,7 +344,9 @@ public class FrmProduto extends javax.swing.JInternalFrame {
 
         if (input == 0) {
 
-            lstProduto.remove(this.indiceLista);
+            ProdutoRdn rdn = new ProdutoRdn();
+            
+            rdn.deletarProduto(this.id);
 
             this.carregarTabela();
 
@@ -351,6 +360,10 @@ public class FrmProduto extends javax.swing.JInternalFrame {
         DefaultTableModel model = (DefaultTableModel) tableProduto.getModel();
 
         model.setRowCount(0);
+        
+        ProdutoRdn rdn = new ProdutoRdn();
+        
+        List<Produto> lstCli = rdn.obterTodos();
 
         for (Produto produto : lstProduto) {
 
