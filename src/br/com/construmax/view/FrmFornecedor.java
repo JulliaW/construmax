@@ -2,11 +2,14 @@ package br.com.construmax.view;
 
 import br.com.construmax.modelo.Endereco;
 import br.com.construmax.modelo.Fornecedor;
+import br.com.construmax.rdn.EnderecoRdn;
+import br.com.construmax.rdn.FornecedorRdn;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +21,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
     ArrayList<Fornecedor> lstFornecedor;
     
     boolean modoAlterarDeletar = false;
-    String id = "";
+    int id = 0;
     int indiceLista = 0;
 
     public FrmFornecedor() {
@@ -28,6 +31,8 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         initComponents();
 
         this.modoNovo();
+        
+        this.carregarTabela();
     }
 
     @SuppressWarnings("unchecked")
@@ -132,7 +137,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "NOME", "TELEFONE", "NASCIMENTO", "EMAIL", "REPRESENTACAO", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "COMPLEMENTO", "NÚMERO", "UF"
+                "ID", "NOME", "DOCUMENTO", "TELEFONE", "NASCIMENTO", "EMAIL", "REPRESENTACAO", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "NÚMERO", "UF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -170,7 +175,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         jLabel10.setText("Representação:");
 
-        jLabel11.setText("Nascimento:");
+        jLabel11.setText("Data Contrato:");
 
         txtUf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -381,36 +386,38 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
             Logger.getLogger(FrmFornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Endereco endereco = new Endereco(txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
-                txtBairro.getText(), txtCep.getText());
-
-        String idForn = "";
+        int idForn = 0;
 
         if (this.modoAlterarDeletar == true) {
             idForn = this.id;
 
         } else {
-            idForn = java.util.UUID.randomUUID().toString();
+            idForn = 0;
         }
 
-        Fornecedor fornecedor = new Fornecedor(id.toString(), txtNome.getText(), cal, txtDocumento.getText(),
+        Endereco endereco = new Endereco(0, txtRua.getText(), txtCidade.getText(), txtNumero.getText(), txtUf.getText(),
+                txtBairro.getText(), txtCep.getText(), idForn);
+        
+        Fornecedor fornecedor = new Fornecedor(idForn, txtNome.getText(), cal, txtDocumento.getText(),
                 txtTelefone.getText(), txtEmail.getText(), endereco, txtRepresentacao.getText());
-
-        this.modoNovo();
+        
+        FornecedorRdn rdn = new FornecedorRdn();
         
         if(this.modoAlterarDeletar == true)
         {
-            lstFornecedor.set(this.indiceLista, fornecedor);
+            rdn.alterarFornecedor(fornecedor);
             btnNovo.setEnabled(true);
         }
         else
         {
-            lstFornecedor.add(fornecedor);
+            rdn.inserirFornecedor(fornecedor);
         }
         
         this.modoAlterarDeletar = false;
         
         this.carregarTabela();
+        
+        this.modoNovo();
 
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -420,14 +427,16 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         int row = this.tableFornecedor.getSelectedRow();
 
-        String idFornecedor = (String) this.tableFornecedor.getValueAt(row, 0);
+        int idFornecedor = (int) this.tableFornecedor.getValueAt(row, 0);
         
         this.id = idFornecedor;
 
-        int indice = 0;
-
-        Fornecedor fornecedor = null;
-        for (int i = 0; i < lstFornecedor.size(); i++) {
+        //int indice = 0;
+        FornecedorRdn rdn = new FornecedorRdn();
+        
+        Fornecedor fornecedor = rdn.obterPorId(id);
+        
+        /*for (int i = 0; i < lstFornecedor.size(); i++) {
 
             if(lstFornecedor.get(i).getId().equals(idFornecedor)){
                 fornecedor = lstFornecedor.get(i);
@@ -436,12 +445,13 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
             }
         }
         
-        this.indiceLista = indice;
+        this.indiceLista = indice;*/
  
         txtNome.setText(fornecedor.getNome());
         txtEmail.setText(fornecedor.getEmail());
         txtRepresentacao.setText(fornecedor.getRepresentacao());
         txtTelefone.setText(fornecedor.getTelefone());
+        txtDocumento.setText(fornecedor.getDocumento());
 
         DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
         txtDataNascimento.setText(formataData.format(fornecedor.getDataNascimento().getTime()));
@@ -461,6 +471,8 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         btnNovo.setEnabled(false);
 
         btnExcluir.setEnabled(true);
+        
+        btnSalvar.setText("Alterar");
 
     }//GEN-LAST:event_tableFornecedorMouseClicked
 
@@ -480,7 +492,13 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         if (input == 0) {
 
-            lstFornecedor.remove(this.indiceLista);
+           EnderecoRdn endRdn = new EnderecoRdn();
+           
+           endRdn.deletarEnderecoPorPessoa(this.id);
+           
+           FornecedorRdn rdn = new FornecedorRdn();
+           
+           rdn.deletarFornecedor(this.id);
 
             this.carregarTabela();
 
@@ -498,8 +516,12 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         DefaultTableModel model = (DefaultTableModel) tableFornecedor.getModel();
 
         model.setRowCount(0);
+        
+        FornecedorRdn rdn = new FornecedorRdn();
+        
+        List<Fornecedor> lstForn = rdn.obterTodos();
 
-        for (Fornecedor fornecedor : lstFornecedor) {
+        for (Fornecedor fornecedor : lstForn) {
 
             DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -507,6 +529,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
             model.addRow(new Object[]{
                 fornecedor.getId(),
                 fornecedor.getNome(),
+                fornecedor.getDocumento(),
                 fornecedor.getTelefone(),
                 formataData.format(fornecedor.getDataNascimento().getTime()),
                 fornecedor.getEmail(),

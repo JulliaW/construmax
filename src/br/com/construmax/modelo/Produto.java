@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public class Produto {
     
-    private String id;
+    private int id;
     private String descricao;
     private String preco;
     private String codigoDeBarras;
@@ -13,7 +13,7 @@ public class Produto {
 
     //private Fornecedor fornecedor;
 
-    public Produto(String id, String descricao, String preco, String codigoDeBarras, String quantidade, 
+    public Produto(int id, String descricao, String preco, String codigoDeBarras, String quantidade, 
             String marca) {
         this.id = id;
         this.descricao = descricao;
@@ -35,11 +35,11 @@ public class Produto {
     }*/
 
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

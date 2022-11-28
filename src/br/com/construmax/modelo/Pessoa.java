@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public abstract class Pessoa {
 
-    protected String id;
+    protected int id;
     protected String nome;
     protected Calendar dataNascimento;
     protected String documento;
@@ -13,7 +13,7 @@ public abstract class Pessoa {
     protected Endereco endereco;
     
         
-    public Pessoa(String id, String nome, Calendar dataNascimento, String documento, 
+    public Pessoa(int id, String nome, Calendar dataNascimento, String documento, 
             String telefone, String email, Endereco endereco)
     {
         this.id = id;
@@ -26,18 +26,8 @@ public abstract class Pessoa {
         
     }
     
-    public Pessoa(String id, String nome)
-    {
-        this.id = id;
-        this.nome = nome;
-    }
-    
-    public String getId() {
+    public int getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getNome() {

@@ -2,23 +2,26 @@ package br.com.construmax.modelo;
 
 public class Endereco {
     
+    private int id;
     private String logradouro;
     private String cidade;
     private String numero;   
     private String uf;
     private String bairro;
-    private String Complemento;
     private String cep;
+    private int idPessoa;
     
-    public Endereco(String logradouro, String cidade, String numero, String uf, 
-           String bairro, String cep)
+    public Endereco(int id, String logradouro, String cidade, String numero, String uf, 
+           String bairro, String cep, int idPessoa)
    {
+       this.id = id;
        this.logradouro = logradouro;
        this.cidade = cidade;
        this.numero = numero;
        this.uf = uf;
        this.bairro = bairro;
        this.cep = cep;
+       this.idPessoa = idPessoa;
    }
 
     public String getLogradouro() {
@@ -61,14 +64,6 @@ public class Endereco {
         this.bairro = bairro;
     }
 
-    public String getComplemento() {
-        return Complemento;
-    }
-
-    public void setComplemento(String Complemento) {
-        this.Complemento = Complemento;
-    }
-
     public String getCep() {
         return cep;
     }
@@ -77,6 +72,13 @@ public class Endereco {
         this.cep = cep;
     }
 
+    public int getIdPessoa() {
+        return idPessoa;
+    }
     
+    public void setIdPessoa(int idPessoa){
+        this.idPessoa = idPessoa;
+    }
+            
     
 }

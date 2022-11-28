@@ -6,6 +6,12 @@ public class ItemVenda {
     private double quantidade;
     private double valorTotal;
 
+    public ItemVenda(Produto produto, double quantidade, double valorTotal) {
+        this.produto = produto;
+        this.quantidade = quantidade;
+        this.valorTotal = valorTotal;
+    }  
+    
     public Produto getProduto() {
         return produto;
     }
@@ -21,10 +27,6 @@ public class ItemVenda {
     public void setQuantidade(double quantidade) {
         this.quantidade = quantidade;
     }
-
-    /*public double getValorTotal() {
-        return this.produto.getPreco() * quantidade;
-    }*/
 
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;

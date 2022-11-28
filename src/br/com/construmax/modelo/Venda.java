@@ -1,43 +1,26 @@
 package br.com.construmax.modelo;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
 public class Venda {
     
-    private Calendar dataVenda;
-    private int numeroVenda;
-    private int numeroNota;
+    private int idVenda;
     
     private Cliente cliente;
     
-    private ArrayList<ItemVenda> itens;
-    private double valorTotal;
-    
     private Funcionario funcionario;
-
-    public Calendar getDataVenda() {
-        return dataVenda;
+    
+    public Venda(int idVenda, Cliente cliente, Funcionario funcionario)
+    {
+       this.idVenda = idVenda;
+       this.cliente = cliente;
+       this.funcionario = funcionario;
     }
 
-    public void setDataVenda(Calendar dataVenda) {
-        this.dataVenda = dataVenda;
+ public int getIdVenda() {
+        return idVenda;
     }
 
-    public int getNumeroVenda() {
-        return numeroVenda;
-    }
-
-    public void setNumeroVenda(int numeroVenda) {
-        this.numeroVenda = numeroVenda;
-    }
-
-    public int getNumeroNota() {
-        return numeroNota;
-    }
-
-    public void setNumeroNota(int numeroNota) {
-        this.numeroNota = numeroNota;
+    public void setIdVenda(int idVenda) {
+        this.idVenda = idVenda;
     }
 
     public Cliente getCliente() {
@@ -48,22 +31,6 @@ public class Venda {
         this.cliente = cliente;
     }
 
-    public ArrayList<ItemVenda> getItens() {
-        return itens;
-    }
-
-    public void setItens(ArrayList<ItemVenda> itens) {
-        this.itens = itens;
-    }
-
-    public double getValorTotal() {
-        return valorTotal;
-    }
-
-    /*public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
-    }*/
-
     public Funcionario getFuncionario() {
         return funcionario;
     }
@@ -72,16 +39,16 @@ public class Venda {
         this.funcionario = funcionario;
     }
     
-    public void imprimir(){
+    /*public void imprimir(){
         
-        System.out.println("Venda: " + this.numeroVenda);
+        System.out.println("Venda: " + this.idVenda);
         System.out.print("Cliente: ");
         System.out.println(this.getCliente().getNome());
         System.out.print("CPF: ");
         System.out.println(this.getCliente().getDocumento());
         System.out.println("===========PEDIDO===========");
         
-        for (ItemVenda item : this.itens){
+        for (ItemVenda item : this.itensVenda){
             System.out.print("Código de barras: ");
             System.out.println(item.getProduto().getCodigoDeBarras());
             System.out.print("Descrição: ");
@@ -98,6 +65,6 @@ public class Venda {
         }
         
         
-    }
+    }*/
     
 }
