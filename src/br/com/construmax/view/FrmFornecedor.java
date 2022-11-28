@@ -137,7 +137,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "NOME", "TELEFONE", "NASCIMENTO", "EMAIL", "REPRESENTACAO", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "COMPLEMENTO", "NÚMERO", "UF"
+                "ID", "NOME", "DOCUMENTO", "TELEFONE", "NASCIMENTO", "EMAIL", "REPRESENTACAO", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "NÚMERO", "UF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -175,7 +175,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
 
         jLabel10.setText("Representação:");
 
-        jLabel11.setText("Nascimento:");
+        jLabel11.setText("Data Contrato:");
 
         txtUf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -471,6 +471,8 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         btnNovo.setEnabled(false);
 
         btnExcluir.setEnabled(true);
+        
+        btnSalvar.setText("Alterar");
 
     }//GEN-LAST:event_tableFornecedorMouseClicked
 
@@ -519,7 +521,7 @@ public class FrmFornecedor extends javax.swing.JInternalFrame {
         
         List<Fornecedor> lstForn = rdn.obterTodos();
 
-        for (Fornecedor fornecedor : lstFornecedor) {
+        for (Fornecedor fornecedor : lstForn) {
 
             DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
 

@@ -21,14 +21,15 @@ public class ProdutoRdn {
             
             str.append("INSERT INTO produto(                ");
             str.append("            descricao               ");
+            str.append("            preco                   ");
             str.append("            ,codigoBarra            ");
             str.append("            ,quantidade             ");
-            str.append("            ,marca                  ");
+            str.append("            ,marca)                 ");
             str.append("      VALUES(                       ");
             str.append("             ?                      ");
             str.append("            ,?                      ");
             str.append("            ,?                      ");
-            str.append("            ,?                      ");
+            str.append("            ,?                      ");            
             str.append("            ,?                      ");
             str.append("         )                          ");                                              
            
@@ -38,9 +39,10 @@ public class ProdutoRdn {
             PreparedStatement stmt = conn.prepareStatement(str.toString(), Statement.RETURN_GENERATED_KEYS);
 
             stmt.setString(1, prod.getDescricao());
-            stmt.setString(2, prod.getCodigoDeBarras());
-            stmt.setString(3, prod.getQuantidade());
-            stmt.setString(4, prod.getMarca());
+            stmt.setString(2, prod.getPreco());            
+            stmt.setString(3, prod.getCodigoDeBarras());
+            stmt.setString(4, prod.getQuantidade());
+            stmt.setString(5, prod.getMarca());
                   
             int id = 0;
             
@@ -71,7 +73,9 @@ public class ProdutoRdn {
             int linhasAfetadas = 0;
             StringBuilder str = new StringBuilder();         
             
-            str.append("UPDATE PRODUTO SET descricao             = ?        ");
+            str.append("UPDATE PRODUTO SET descricao             = ?        ");            
+            str.append("                  ,preco                 = ?        ");           
+            str.append("                  ,quantidade            = ?        ");
             str.append("                  ,codigoBarra		 = ?        ");
             str.append("                  ,quantidade            = ?        ");
             str.append("                  ,marca 		 = ?        ");
@@ -83,9 +87,10 @@ public class ProdutoRdn {
             PreparedStatement stmt = conn.prepareStatement(str.toString());
 
             stmt.setString(1, prod.getDescricao());
-            stmt.setString(2, prod.getCodigoDeBarras());
-            stmt.setString(3, prod.getQuantidade());
-            stmt.setString(4, prod.getMarca());
+            stmt.setString(2, prod.getPreco());
+            stmt.setString(3, prod.getCodigoDeBarras());
+            stmt.setString(4, prod.getQuantidade());
+            stmt.setString(5, prod.getMarca());
 
             linhasAfetadas = stmt.executeUpdate();            
             
@@ -135,13 +140,13 @@ public class ProdutoRdn {
 
             StringBuilder str = new StringBuilder();
 
-            str.append("SELECT id                ");           
-            str.append(",descricao               ");
-            str.append(",codigoBarra             ");
-            str.append(",quantidade              ");
-            str.append(",dataValidade            ");
-            str.append(",marca                   ");
-            str.append("FROM PESSOA              ");
+            str.append("SELECT id                       ");           
+            str.append("       ,descricao               ");
+            str.append("       ,preco                   ");
+            str.append("       ,codigoBarra             ");
+            str.append("       ,quantidade              ");
+            str.append("       ,marca                   ");
+            str.append("FROM PRODUTO                    ");
 
             //ABRE A CONEXÃO
             Connection conn = new ConnectionFactory().getConnection();
@@ -155,9 +160,9 @@ public class ProdutoRdn {
             while (rs.next()) {                            
                 
                 Produto prod = new Produto(rs.getInt("ID"),
-                        rs.getString("NOME"),
                         rs.getString("DESCRICAO"),
-                        rs.getString("CODIGOBARRAS"),
+                        rs.getString("PRECO"),
+                        rs.getString("CODIGOBARRA"),
                         rs.getString("QUANTIDADE"),
                         rs.getString("MARCA"));
                         
@@ -179,14 +184,14 @@ public class ProdutoRdn {
 
             StringBuilder str = new StringBuilder();
 
-            str.append("SELECT id                ");           
-            str.append(",descricao               ");
-            str.append(",codigoBarra             ");
-            str.append(",quantidade              ");
-            str.append(",dataValidade            ");
-            str.append(",marca                   ");
-            str.append("FROM PESSOA              ");
-            str.append("WHERE ID = ?             ");
+            str.append("SELECT id                       ");           
+            str.append("       ,descricao               ");
+            str.append("       ,preco                   ");
+            str.append("       ,codigoBarra             ");
+            str.append("       ,quantidade              ");
+            str.append("       ,marca                   ");
+            str.append("FROM PRODUTO                    ");
+            str.append("WHERE ID = ?                    ");
 
             //ABRE A CONEXÃO
             Connection conn = new ConnectionFactory().getConnection();
@@ -202,12 +207,11 @@ public class ProdutoRdn {
             if (rs.next()) {
                 
                 Produto prod = new Produto(rs.getInt("ID"),
-                        rs.getString("NOME"),
                         rs.getString("DESCRICAO"),
-                        rs.getString("CODIGOBARRAS"),
+                        rs.getString("PRECO"),
+                        rs.getString("CODIGOBARRA"),
                         rs.getString("QUANTIDADE"),
-                        rs.getString("MARCA"));
-                
+                        rs.getString("MARCA"));             
 
             }
             return ret;

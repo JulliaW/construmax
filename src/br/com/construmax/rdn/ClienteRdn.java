@@ -188,11 +188,6 @@ public class ClienteRdn {
                 //CONVERTER SQL DATE TO CALENDAR
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(rs.getDate("DATANASCIMENTO"));
-
-                /*              
-                public Cliente(int id, String nome, Calendar dataNascimento, String documento, 
-                String telefone, String email, Endereco endereco, String cartaoFidelidade)
-                 */
                
               Endereco end = endRdn.obterPorIdPessoa(rs.getInt("ID"));
                 
@@ -281,7 +276,7 @@ public class ClienteRdn {
             System.out.println("ERRO:" + ex.getMessage());
             return null;
         }
-    }
+    }   
 
 }
 

@@ -22,7 +22,7 @@ public class EnderecoRdn {
             str.append("            ,uf                      ");
             str.append("            ,bairro                  ");
             str.append("            ,cep                     ");
-            str.append("            ,cidade                   ");
+            str.append("            ,cidade                  ");
             str.append("            ,idPessoa)               ");
             str.append("      VALUES(                        ");
             str.append("             ?                       ");

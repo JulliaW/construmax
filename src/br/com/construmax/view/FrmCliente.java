@@ -139,7 +139,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "NOME", "TELEFONE", "NASCIMENTO", "EMAIL", "CARTÃO FIDELIDADE", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "COMPLEMENTO", "NÚMERO", "UF"
+                "ID", "NOME", "DOCUMENTO", "TELEFONE", "NASCIMENTO", "EMAIL", "CARTAO FIDELIDADE", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "NÚMERO", "UF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -356,6 +356,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
         txtNumero.setEnabled(false);
         txtUf.setEnabled(false);
 
+        btnSalvar.setText("Salvar");
         btnSalvar.setEnabled(false);
         btnExcluir.setEnabled(false);
         btnNovo.setEnabled(true);
@@ -532,13 +533,14 @@ public class FrmCliente extends javax.swing.JInternalFrame {
 
         List<Cliente> lstCli = cliRdn.obterTodos();
 
-        for (Cliente cli : lstCliente) {
+        for (Cliente cli : lstCli) {
 
             DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
 
             model.addRow(new Object[]{
                 cli.getId(),
-                cli.getNome(),
+                cli.getNome(),                      
+                cli.getDocumento(),
                 cli.getTelefone(),
                 formataData.format(cli.getDataNascimento().getTime()),
                 cli.getEmail(),
@@ -548,7 +550,7 @@ public class FrmCliente extends javax.swing.JInternalFrame {
                 cli.getEndereco().getCep(),
                 cli.getEndereco().getCidade(),
                 cli.getEndereco().getNumero(),
-                cli.getEndereco().getUf()
+                cli.getEndereco().getUf()               
             });
         }
 

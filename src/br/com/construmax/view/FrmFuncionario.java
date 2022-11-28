@@ -137,7 +137,7 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ID", "NOME", "TELEFONE", "NASCIMENTO", "EMAIL", "CARTÃO PONTO", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "COMPLEMENTO", "NÚMERO", "UF"
+                "ID", "NOME", "DOCUMENTO", "TELEFONE", "NASCIMENTO", "EMAIL", "CARTÃO PONTO", "LOGRADOURO", "BAIRRO", "CEP", "CIDADE", "COMPLEMENTO", "NÚMERO", "UF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -401,11 +401,11 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
         Funcionario funcionario = new Funcionario(idFunci, txtNome.getText(), cal, txtDocumento.getText(), 
                 txtTelefone.getText(), txtEmail.getText(), endereco, txtCartaoPonto.getText());
 
-        FuncionarioRdn cliRdn = new FuncionarioRdn();
+        FuncionarioRdn funRdn = new FuncionarioRdn();
         
         if(this.modoAlterarDeletar == true)
         {
-            cliRdn.alterarFuncionario(funcionario);
+            funRdn.alterarFuncionario(funcionario);
             btnNovo.setEnabled(true);
         }
         else
@@ -519,7 +519,7 @@ public class FrmFuncionario extends javax.swing.JInternalFrame {
         
         List<Funcionario> lstFunc = rdn.obterTodos();
                
-        for (Funcionario funcionario : lstFuncionario) {
+        for (Funcionario funcionario : lstFunc) {
 
             DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
             

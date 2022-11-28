@@ -285,49 +285,6 @@ public class FrmProduto extends javax.swing.JInternalFrame {
         this.modoNovo();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void tableProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProdutoMouseClicked
-
-        this.modoAlterarDeletar = true;
-        
-        int row = this.tableProduto.getSelectedRow();
-
-        int idProduto = (int) this.tableProduto.getValueAt(row, 0);
-        
-        this.id = idProduto;
-
-        //int indice = 0;
-        ProdutoRdn rdn = new ProdutoRdn();
-        
-        Produto produto = rdn.obterPorId(id);
-        
-        /*for (int i = 0; i < lstProduto.size(); i++) {
-
-            if(lstProduto.get(i).getId().equals(idProduto)){
-                produto = lstProduto.get(i);
-                indice = i;
-                break;
-            }
-        }
-        
-        this.indiceLista = indice;*/
- 
-        txtDescricao.setText(produto.getDescricao());
-        txtCodBarras.setText(produto.getCodigoDeBarras());
-        txtPreco.setText(produto.getPreco());
-        txtMarca.setText(produto.getMarca());
-        txtQuantidade.setText(produto.getQuantidade());
-        
-//        txtFornecedor.setText(produto.getFornecedor().getNome());
-        
-        this.habilitarCampos();
-
-        btnSalvar.setEnabled(true);
-
-        btnNovo.setEnabled(false);
-
-        btnExcluir.setEnabled(true);
-    }//GEN-LAST:event_tableProdutoMouseClicked
-
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
 
         this.habilitarCampos();
@@ -355,6 +312,49 @@ public class FrmProduto extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnExcluirActionPerformed
 
+    private void tableProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProdutoMouseClicked
+
+        this.modoAlterarDeletar = true;
+
+        int row = this.tableProduto.getSelectedRow();
+
+        int idProduto = (int) this.tableProduto.getValueAt(row, 0);
+
+        this.id = idProduto;
+
+        //int indice = 0;
+        ProdutoRdn rdn = new ProdutoRdn();
+
+        Produto produto = rdn.obterPorId(id);
+
+        /*for (int i = 0; i < lstProduto.size(); i++) {
+
+            if(lstProduto.get(i).getId().equals(idProduto)){
+                produto = lstProduto.get(i);
+                indice = i;
+                break;
+            }
+        }
+
+        this.indiceLista = indice;*/
+
+        txtDescricao.setText(produto.getDescricao());
+        txtCodBarras.setText(produto.getCodigoDeBarras());
+        txtPreco.setText(produto.getPreco());
+        txtMarca.setText(produto.getMarca());
+        txtQuantidade.setText(produto.getQuantidade());
+
+        this.habilitarCampos();
+
+        btnSalvar.setEnabled(true);
+
+        btnNovo.setEnabled(false);
+
+        btnExcluir.setEnabled(true);
+        
+         btnSalvar.setText("Alterar");
+    }//GEN-LAST:event_tableProdutoMouseClicked
+
     private void carregarTabela() {
 
         DefaultTableModel model = (DefaultTableModel) tableProduto.getModel();
@@ -363,20 +363,18 @@ public class FrmProduto extends javax.swing.JInternalFrame {
         
         ProdutoRdn rdn = new ProdutoRdn();
         
-        List<Produto> lstCli = rdn.obterTodos();
+        List<Produto> lstProduto = rdn.obterTodos();
 
         for (Produto produto : lstProduto) {
-
-            DateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
 
             //adicionar a linha
             model.addRow(new Object[]{
                 produto.getId(),
-                produto.getDescricao(),
-                produto.getCodigoDeBarras(),
+                produto.getDescricao(),                
                 produto.getPreco(),
-                produto.getMarca(),
-                produto.getQuantidade()
+                produto.getCodigoDeBarras(),                
+                produto.getQuantidade(),
+                produto.getMarca()
 //                produto.getFornecedor().getNome()
                 
             });

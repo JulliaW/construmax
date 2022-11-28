@@ -25,10 +25,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     boolean frmFornAbertoFechado = false;
     boolean frmFuncAbertoFechado = false;
     boolean frmProdAbertoFechado = false;
+    boolean frmVendaAbertoFechado = false;
     FrmCliente frmCliente = new FrmCliente();
     FrmFornecedor frmFornecedor = new FrmFornecedor();
     FrmFuncionario frmFuncionario = new FrmFuncionario();
     FrmProduto frmProduto = new FrmProduto();
+    FrmVenda frmVenda = new FrmVenda();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,6 +50,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnProduto = new javax.swing.JToggleButton();
         btnCliente = new javax.swing.JToggleButton();
         jButton2 = new javax.swing.JButton();
+        btnProduto1 = new javax.swing.JToggleButton();
         painel = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -140,33 +143,46 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnProduto1.setBackground(new java.awt.Color(255, 151, 0));
+        btnProduto1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnProduto1.setText("Venda");
+        btnProduto1.setToolTipText("");
+        btnProduto1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProduto1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnFuncionario, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
             .addComponent(btnFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnProduto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(btnProduto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnProduto1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnProduto1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(137, Short.MAX_VALUE))
         );
 
         desktopPane.add(jPanel1);
@@ -284,7 +300,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
         // TODO add your handling code here:
-        if (frmFuncAbertoFechado == true || frmProdAbertoFechado == true || frmFornAbertoFechado == true) {
+        if (frmFuncAbertoFechado == true || frmProdAbertoFechado == true || frmFornAbertoFechado == true || frmVendaAbertoFechado == true) {
             frmFuncionario.hide();
             frmFuncAbertoFechado = false;
             
@@ -293,6 +309,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
             
             frmFornecedor.hide();
             frmFornAbertoFechado = false;
+            
+            frmVenda.hide();
+            frmVendaAbertoFechado = false;
             
             painel.add(frmCliente);
             frmCliente.show();
@@ -308,7 +327,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFornecedorActionPerformed
         // TODO add your handling code here:
-        if (frmFuncAbertoFechado == true || frmProdAbertoFechado == true || frmClienteAbertoFechado == true) {
+        if (frmFuncAbertoFechado == true || frmProdAbertoFechado == true || frmClienteAbertoFechado == true || frmVendaAbertoFechado == true) {
             
             frmFuncionario.hide();
             frmFuncAbertoFechado = false;
@@ -318,6 +337,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
             
             frmCliente.hide();
             frmClienteAbertoFechado = false; 
+            
+            frmVenda.hide();
+            frmVendaAbertoFechado = false;
             
             painel.add(frmFornecedor);
             frmFornecedor.show();
@@ -333,7 +355,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncionarioActionPerformed
         // TODO add your handling code here:
-        if (frmClienteAbertoFechado == true || frmProdAbertoFechado == true || frmFornAbertoFechado == true) {
+        if (frmClienteAbertoFechado == true || frmProdAbertoFechado == true || frmFornAbertoFechado == true || frmVendaAbertoFechado == true) {
             frmCliente.hide();
             frmClienteAbertoFechado = false;
             
@@ -343,10 +365,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
             frmFornecedor.hide();
             frmFornAbertoFechado = false;
             
+            frmVenda.hide();
+            frmVendaAbertoFechado = false;
+            
             painel.add(frmFuncionario);
             frmFuncionario.show();
-            frmFuncAbertoFechado = true;
-
+            frmFuncAbertoFechado = true;           
         } 
         else {
             painel.add(frmFuncionario);
@@ -357,7 +381,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutoActionPerformed
         // TODO add your handling code here:
-        if (frmClienteAbertoFechado == true || frmFuncAbertoFechado == true || frmFornAbertoFechado == true) {
+        if (frmClienteAbertoFechado == true || frmFuncAbertoFechado == true || frmFornAbertoFechado == true || frmVendaAbertoFechado == true) {
             frmCliente.hide();
             frmClienteAbertoFechado = false;
             
@@ -367,10 +391,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
             frmFornecedor.hide();
             frmFornAbertoFechado = false;
             
+            frmVenda.hide();
+            frmVendaAbertoFechado = false;
+            
             painel.add(frmProduto);
             frmProduto.show();
             frmProdAbertoFechado = true;
-
         } 
         else {
             painel.add(frmProduto);
@@ -386,6 +412,33 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 "Jullia e Fernando", "Créditos", JOptionPane.CLOSED_OPTION);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void btnProduto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProduto1ActionPerformed
+        // TODO add your handling code here:
+        
+        if (frmClienteAbertoFechado == true || frmFuncAbertoFechado == true || frmFornAbertoFechado == true || frmProdAbertoFechado == true) {
+            frmCliente.hide();
+            frmClienteAbertoFechado = false;
+            
+            frmFuncionario.hide();
+            frmFuncAbertoFechado = false;
+            
+            frmFornecedor.hide();
+            frmFornAbertoFechado = false;           
+
+            frmProduto.hide();
+            frmProdAbertoFechado = false;
+            
+            painel.add(frmVenda);
+            frmVenda.show();
+            frmVendaAbertoFechado = true;
+        } 
+        else {
+            painel.add(frmVenda);
+            frmVenda.show();
+            frmVendaAbertoFechado = true;
+        }
+    }//GEN-LAST:event_btnProduto1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -396,6 +449,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnFornecedor;
     private javax.swing.JToggleButton btnFuncionario;
     private javax.swing.JToggleButton btnProduto;
+    private javax.swing.JToggleButton btnProduto1;
     private javax.swing.JMenuItem contentMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
